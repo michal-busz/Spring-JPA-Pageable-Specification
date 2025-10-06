@@ -20,7 +20,7 @@ public record GenericSortingRequest<T>(
         SortOrder sortOrder,
         T object
 ) {
-    public Pageable toPageable(){
+    public Pageable toPageable() {
         final var direction = sortOrder.toDirection();
         final var sort = Sort.by(direction, sortBy);
         return PageRequest.of(pageNumber, pageSize, sort);

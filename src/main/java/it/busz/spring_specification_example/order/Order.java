@@ -13,9 +13,9 @@ class Order {
     private Long userId;
     private String description;
     private ZonedDateTime dateCreated;
-    private OrderStatus status;
+    private String status;
 
-    public Order(Long userId, String description, ZonedDateTime dateCreated, OrderStatus status) {
+    public Order(Long userId, String description, ZonedDateTime dateCreated, String status) {
         this.userId = userId;
         this.description = description;
         this.dateCreated = dateCreated;
@@ -37,7 +37,7 @@ class Order {
         return dateCreated;
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
