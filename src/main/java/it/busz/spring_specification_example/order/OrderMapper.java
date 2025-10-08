@@ -6,12 +6,13 @@ class OrderMapper {
     private OrderMapper() {
     }
 
-    static List<OrderDto> toDtoList(List<Order> order){
+    static List<OrderDto> toDtoList(List<Order> order) {
         return order.stream()
                 .map(OrderMapper::toDto)
                 .toList();
     }
-    static OrderDto toDto(Order order){
+
+    static OrderDto toDto(Order order) {
         return new OrderDto(
                 order.getId(),
                 order.getUserId(),
