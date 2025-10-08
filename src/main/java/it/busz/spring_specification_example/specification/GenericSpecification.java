@@ -31,11 +31,11 @@ public class GenericSpecification {
 
     }
 
-    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter> filterList, @NotNull List<String> allowedFields) throws IllegalArgumentException{
+    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter> filterList, @NotNull List<String> allowedFields) throws IllegalArgumentException {
         var resultSpec = Specification.<T>allOf();
 
         for (final var filter : filterList) {
-            if(!allowedFields.contains(filter.field())){
+            if (!allowedFields.contains(filter.field())) {
                 throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_FIELD.getErrorCode());
             }
             final var filterSpec = GenericSpecification.<T, Object>specificationFor(filter.field(), filter.operator(), filter.value());

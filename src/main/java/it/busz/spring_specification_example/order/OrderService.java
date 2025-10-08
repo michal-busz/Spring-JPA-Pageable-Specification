@@ -1,9 +1,9 @@
 package it.busz.spring_specification_example.order;
 
-import it.busz.spring_specification_example.specification.GenericSpecification;
 import it.busz.spring_specification_example.request.GenericFilter;
 import it.busz.spring_specification_example.request.GenericResponse;
 import it.busz.spring_specification_example.request.GenericSortingRequest;
+import it.busz.spring_specification_example.specification.GenericSpecification;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
@@ -25,26 +25,25 @@ class OrderService {
         this.orderRepo = orderRepo;
     }
 
-    GenericResponse<OrderDto> searchSorting(@Valid GenericSortingRequest<Void> request) {
-        final var pageable = request.toPageable(ALLOWED_FILTER_FIELDS);
-        final var orders = orderRepo.findAll(pageable);
-        return getResponseFor(orders);
-    }
-
-
-    GenericResponse<OrderDto> searchFiltering(@Valid GenericSortingRequest<OrderListRequest> request, @NotNull Long userId) {
-        final var pageable = request.toPageable(ALLOWED_FILTER_FIELDS);
-        final var spec = getSpecificationForSearch(request.object().filters(), userId);
-        final var orders = orderRepo.findAll(spec, pageable);
-        return getResponseFor(orders);
-    }
-
     private static GenericResponse<OrderDto> getResponseFor(Page<Order> orders) {
         final var orderDtos = OrderMapper.toDtoList(orders.getContent());
         return new GenericResponse<>(
                 orders.getTotalElements(),
                 orderDtos
         );
+    }
+
+    GenericResponse<OrderDto> searchSorting(@Valid GenericSortingRequest<Void> request) {
+        final var pageable = request.toPageable(ALLOWED_FILTER_FIELDS);
+        final var orders = orderRepo.findAll(pageable);
+        return getResponseFor(orders);
+    }
+
+    GenericResponse<OrderDto> searchFiltering(@Valid GenericSortingRequest<OrderListRequest> request, @NotNull Long userId) {
+        final var pageable = request.toPageable(ALLOWED_FILTER_FIELDS);
+        final var spec = getSpecificationForSearch(request.object().filters(), userId);
+        final var orders = orderRepo.findAll(spec, pageable);
+        return getResponseFor(orders);
     }
 
     private Specification<Order> getSpecificationForSearch(List<GenericFilter> filters, Long userId) {

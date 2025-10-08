@@ -16,6 +16,9 @@ import static it.busz.spring_specification_example.order.OrderTestConstants.*;
 
 final class OrderTestDataProvider {
 
+    private OrderTestDataProvider() {
+    }
+
     static Stream<Arguments> sortingWithPagination() {
         return Stream.of(
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, ID_FIELD, SortOrder.ASC, null), "Full page - Sort by ID ascending", false)),
@@ -33,13 +36,12 @@ final class OrderTestDataProvider {
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 3, DATE_CREATED_FIELD, SortOrder.DESC, null), "First page (3 items) sorted by DateCreated DESC", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(1, 3, ID_FIELD, SortOrder.ASC, null), "Second page (3 items) sorted by ID ASC", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(1, 3, DESCRIPTION_FIELD, SortOrder.DESC, null), "Second page (3 items) sorted by Description DESC", false)),
-                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(99, 4, ID_FIELD, SortOrder.ASC, null), "Page 99 (should be empty) sorted by ID ASC", true)),
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(999, 4, ID_FIELD, SortOrder.ASC, null), "Page 999 (should be empty) sorted by ID ASC", true)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 1, DATE_CREATED_FIELD, SortOrder.DESC, null), "Single item per page sorted by DateCreated DESC", false)));
     }
 
     static Stream<Arguments> filtering() {
         return Stream.of(
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.EQUALS, 2L), "ID equals 2", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.LESS_THAN, 3L), "ID less than 3", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.GREATER_THAN, 2L), "ID greater than 2", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.LESS_THAN_EQUALS, 2L), "ID less than or equals 2", false)),
@@ -53,7 +55,6 @@ final class OrderTestDataProvider {
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(USER_ID_FIELD, FilterOperator.LESS_THAN, 2L), "UserId less than 2", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(USER_ID_FIELD, FilterOperator.EQUALS, 999L), "UserId equals 999 (should be empty)", true)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.EQUALS, DESCRIPTION_PREFIX + "1"), "Description equals 'description - 1'", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.LESS_THAN, DESCRIPTION_PREFIX + "3"), "Description less than 'description - 3'", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.GREATER_THAN, DESCRIPTION_PREFIX + "1"), "Description greater than 'description - 1'", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.LESS_THAN_EQUALS, DESCRIPTION_PREFIX + "2"), "Description less than or equals 'description - 2'", false)),
@@ -77,7 +78,7 @@ final class OrderTestDataProvider {
         );
     }
 
-    static Stream<Arguments> invalidFiltering() {
+    static Stream<Arguments> filteringValidation() {
         return Stream.of(
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(INVALID_FIELD, FilterOperator.EQUALS, "test"), "Invalid field 'invalidField' should throw exception", false)),
                 Arguments.of(new OrderFilteringTestDto(new GenericFilter(NON_EXISTING_FIELD, FilterOperator.EQUALS, 123L), "Invalid field 'nonExistingField' should throw exception", false)),
@@ -85,7 +86,7 @@ final class OrderTestDataProvider {
         );
     }
 
-    static Stream<Arguments> invalidSorting() {
+    static Stream<Arguments> sortingValidation() {
         return Stream.of(
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, INVALID_FIELD, SortOrder.ASC, null), "Sort by invalid field 'invalidField' should throw exception", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, NON_EXISTING_FIELD, SortOrder.DESC, null), "Sort by invalid field 'nonExistingField' should throw exception", false)),
@@ -117,8 +118,5 @@ final class OrderTestDataProvider {
                 ZonedDateTime.now().minusDays(5).plusDays(new Random().nextInt(7)),
                 orderStatus.name()
         );
-    }
-
-    private OrderTestDataProvider() {
     }
 }

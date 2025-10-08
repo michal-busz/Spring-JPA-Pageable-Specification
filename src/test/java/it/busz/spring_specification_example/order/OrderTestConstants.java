@@ -12,7 +12,7 @@ final class OrderTestConstants {
     static final String NON_EXISTING_FIELD = "nonExistingField";
     static final String FAKE_FIELD = "fakeField";
 
-    static final int TOTAL_ORDERS = 100;
+    static final int TOTAL_ORDERS = 1000;
     static final Long USER_ID = 1L;
     static final String DESCRIPTION_PREFIX = "description - ";
 

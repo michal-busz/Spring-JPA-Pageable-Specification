@@ -1,7 +1,7 @@
 package it.busz.spring_specification_example.order;
 
-import it.busz.spring_specification_example.specification.GenericSpecification;
 import it.busz.spring_specification_example.request.FilterOperator;
+import it.busz.spring_specification_example.specification.GenericSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.ZonedDateTime;

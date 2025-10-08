@@ -12,13 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 final class OrderVerificationHelper {
 
-    private record TestData(
-            GenericResponse<OrderDto> response,
-            GenericSortingRequest<?> request,
-            String description,
-            boolean shouldBeEmpty
-    ) {
-
+    private OrderVerificationHelper() {
     }
 
     static void verifySorting(
@@ -54,7 +48,7 @@ final class OrderVerificationHelper {
         final var testDescription = testDto.description();
         final var response = testDto.response();
 
-        if(!testDto.shouldBeEmpty()){
+        if (!testDto.shouldBeEmpty()) {
             assertTrue(response.totalCount() > 0, TOTAL_COUNT_NON_NEGATIVE_ERROR.concat(testDescription));
         }
         assertTrue(
@@ -135,6 +129,12 @@ final class OrderVerificationHelper {
         }
     }
 
-    private OrderVerificationHelper() {
+    private record TestData(
+            GenericResponse<OrderDto> response,
+            GenericSortingRequest<?> request,
+            String description,
+            boolean shouldBeEmpty
+    ) {
+
     }
 }

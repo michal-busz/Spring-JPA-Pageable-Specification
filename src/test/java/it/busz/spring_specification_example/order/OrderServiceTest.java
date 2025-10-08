@@ -3,6 +3,7 @@ package it.busz.spring_specification_example.order;
 import it.busz.spring_specification_example.ContainerTest;
 import it.busz.spring_specification_example.request.GenericSortingRequest;
 import it.busz.spring_specification_example.request.SortOrder;
+import it.busz.spring_specification_example.specification.SpecificationError;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +28,7 @@ class OrderServiceTest extends ContainerTest {
 
     @BeforeAll
     void prepareTest() {
+        orderRepo.deleteAll();
         final var orders = OrderTestDataProvider.getOrders();
         orderRepo.saveAll(orders);
     }
@@ -59,7 +61,7 @@ class OrderServiceTest extends ContainerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#invalidFiltering")
+    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#filteringValidation")
     void searchFilteringValidation(@NotNull OrderFilteringTestDto testDto) {
         // given
         final var filters = new OrderListRequest(List.of(testDto.filter()));
@@ -68,11 +70,11 @@ class OrderServiceTest extends ContainerTest {
         // when & then
         final var exception = assertThrows(IllegalArgumentException.class,
                 () -> orderService.searchFiltering(request, USER_ID));
-        assertEquals("invalid-filter-field", exception.getMessage());
+        assertEquals(SpecificationError.INVALID_FILTER_FIELD.getErrorCode(), exception.getMessage());
     }
 
     @ParameterizedTest
-    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#invalidSorting")
+    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#sortingValidation")
     void searchSortingValidation(@NotNull OrderSortingTestDto testDto) {
         // given
         final var request = testDto.request();
@@ -80,6 +82,6 @@ class OrderServiceTest extends ContainerTest {
         // when & then
         final var exception = assertThrows(IllegalArgumentException.class,
                 () -> orderService.searchSorting(request));
-        assertEquals("invalid-filter-field", exception.getMessage());
+        assertEquals(SpecificationError.INVALID_FILTER_FIELD.getErrorCode(), exception.getMessage());
     }
 }
