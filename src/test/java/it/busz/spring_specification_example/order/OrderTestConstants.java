@@ -2,19 +2,20 @@ package it.busz.spring_specification_example.order;
 
 final class OrderTestConstants {
 
-    // Field name constants
     static final String ID_FIELD = "id";
     static final String USER_ID_FIELD = "userId";
     static final String DESCRIPTION_FIELD = "description";
     static final String STATUS_FIELD = "status";
     static final String DATE_CREATED_FIELD = "dateCreated";
 
-    // Test utilities constants
+    static final String INVALID_FIELD = "invalidField";
+    static final String NON_EXISTING_FIELD = "nonExistingField";
+    static final String FAKE_FIELD = "fakeField";
+
     static final int TOTAL_ORDERS = 100;
     static final Long USER_ID = 1L;
     static final String DESCRIPTION_PREFIX = "description - ";
 
-    // Assertion message constants
     static final String RESPONSE_NULL_ERROR = "Response result should not be null for: ";
     static final String TOTAL_COUNT_NULL_ERROR = "Total count should not be null for: ";
     static final String TOTAL_COUNT_MATCH_ERROR = "Total count should match expected for: ";

@@ -92,7 +92,7 @@ final class OrderVerificationHelper {
             case DESCRIPTION_FIELD -> compare(current.description(), next.description(), testDto);
             case STATUS_FIELD -> compare(current.status(), next.status(), testDto);
             case DATE_CREATED_FIELD -> compare(current.dateCreated(), next.dateCreated(), testDto);
-            default -> throw new IllegalArgumentException(); //TODO
+            default -> throw new IllegalArgumentException("Field not supported");
         }
     }
 

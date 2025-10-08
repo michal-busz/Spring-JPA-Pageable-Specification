@@ -1,4 +1,4 @@
-package it.busz.spring_specification_example;
+package it.busz.spring_specification_example.specification;
 
 import it.busz.spring_specification_example.request.FilterOperator;
 import it.busz.spring_specification_example.request.GenericFilter;
@@ -31,10 +31,13 @@ public class GenericSpecification {
 
     }
 
-    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter> filterList) {
+    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter> filterList, @NotNull List<String> allowedFields) throws IllegalArgumentException{
         var resultSpec = Specification.<T>allOf();
 
         for (final var filter : filterList) {
+            if(!allowedFields.contains(filter.field())){
+                throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_FIELD.getErrorCode());
+            }
             final var filterSpec = GenericSpecification.<T, Object>specificationFor(filter.field(), filter.operator(), filter.value());
             resultSpec = resultSpec.and(filterSpec);
         }
@@ -46,7 +49,7 @@ public class GenericSpecification {
             case Long l -> function.apply(path.as(Long.class), l);
             case String s -> function.apply(path.as(String.class), s);
             case ZonedDateTime t -> function.apply(path.as(ZonedDateTime.class), t);
-            default -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_VALUE.getErrorCode());
         };
     }
 
@@ -55,7 +58,7 @@ public class GenericSpecification {
         if (type.isAssignableFrom(value.getClass())) {
             return value;
         } else {
-            throw new IllegalArgumentException(); //TODO
+            throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_VALUE.getErrorCode());
         }
     }
 

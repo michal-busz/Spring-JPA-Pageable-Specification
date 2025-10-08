@@ -15,6 +15,8 @@ import static it.busz.spring_specification_example.order.OrderTestConstants.ID_F
 import static it.busz.spring_specification_example.order.OrderTestConstants.USER_ID;
 import static it.busz.spring_specification_example.order.OrderVerificationHelper.verifyFiltering;
 import static it.busz.spring_specification_example.order.OrderVerificationHelper.verifySorting;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OrderServiceTest extends ContainerTest {
 
@@ -56,4 +58,28 @@ class OrderServiceTest extends ContainerTest {
         verifyFiltering(response, request, testDto);
     }
 
+    @ParameterizedTest
+    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#invalidFiltering")
+    void searchFilteringValidation(@NotNull OrderFilteringTestDto testDto) {
+        // given
+        final var filters = new OrderListRequest(List.of(testDto.filter()));
+        final var request = new GenericSortingRequest<>(0, 10, ID_FIELD, SortOrder.ASC, filters);
+
+        // when & then
+        final var exception = assertThrows(IllegalArgumentException.class,
+                () -> orderService.searchFiltering(request, USER_ID));
+        assertEquals("invalid-filter-field", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @MethodSource("it.busz.spring_specification_example.order.OrderTestDataProvider#invalidSorting")
+    void searchSortingValidation(@NotNull OrderSortingTestDto testDto) {
+        // given
+        final var request = testDto.request();
+
+        // when & then
+        final var exception = assertThrows(IllegalArgumentException.class,
+                () -> orderService.searchSorting(request));
+        assertEquals("invalid-filter-field", exception.getMessage());
+    }
 }

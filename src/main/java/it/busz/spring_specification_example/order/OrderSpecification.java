@@ -1,6 +1,6 @@
 package it.busz.spring_specification_example.order;
 
-import it.busz.spring_specification_example.GenericSpecification;
+import it.busz.spring_specification_example.specification.GenericSpecification;
 import it.busz.spring_specification_example.request.FilterOperator;
 import org.springframework.data.jpa.domain.Specification;
 
