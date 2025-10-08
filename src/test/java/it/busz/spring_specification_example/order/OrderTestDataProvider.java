@@ -77,6 +77,22 @@ final class OrderTestDataProvider {
         );
     }
 
+    static Stream<Arguments> invalidFiltering() {
+        return Stream.of(
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter(INVALID_FIELD, FilterOperator.EQUALS, "test"), "Invalid field 'invalidField' should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter(NON_EXISTING_FIELD, FilterOperator.EQUALS, 123L), "Invalid field 'nonExistingField' should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter(FAKE_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now()), "Invalid field 'fakeField' should throw exception", false))
+        );
+    }
+
+    static Stream<Arguments> invalidSorting() {
+        return Stream.of(
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, INVALID_FIELD, SortOrder.ASC, null), "Sort by invalid field 'invalidField' should throw exception", false)),
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, NON_EXISTING_FIELD, SortOrder.DESC, null), "Sort by invalid field 'nonExistingField' should throw exception", false)),
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, FAKE_FIELD, SortOrder.ASC, null), "Sort by invalid field 'fakeField' should throw exception", false))
+        );
+    }
+
     static List<Order> getOrders() {
         final var orders = new ArrayList<Order>();
         final var ordersToGet = TOTAL_ORDERS - 1;
