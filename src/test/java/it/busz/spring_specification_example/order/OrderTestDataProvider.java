@@ -23,8 +23,6 @@ final class OrderTestDataProvider {
         return Stream.of(
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, ID_FIELD, SortOrder.ASC, null), "Full page - Sort by ID ascending", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, ID_FIELD, SortOrder.DESC, null), "Full page - Sort by ID descending", false)),
-                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, USER_ID_FIELD, SortOrder.ASC, null), "Full page - Sort by UserId ascending", false)),
-                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, USER_ID_FIELD, SortOrder.DESC, null), "Full page - Sort by UserId descending", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, DESCRIPTION_FIELD, SortOrder.ASC, null), "Full page - Sort by Description ascending", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, DESCRIPTION_FIELD, SortOrder.DESC, null), "Full page - Sort by Description descending", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, STATUS_FIELD, SortOrder.ASC, null), "Full page - Sort by Status ascending", false)),
@@ -42,47 +40,45 @@ final class OrderTestDataProvider {
 
     static Stream<Arguments> filtering() {
         return Stream.of(
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.LESS_THAN, 3L), "ID less than 3", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.GREATER_THAN, 2L), "ID greater than 2", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.LESS_THAN_EQUALS, 2L), "ID less than or equals 2", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.GREATER_THAN_EQUALS, 4L), "ID greater than or equals 4", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.LESS_THAN, 3L), "ID less than 3", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.GREATER_THAN, 2L), "ID greater than 2", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.LESS_THAN_EQUALS, 2L), "ID less than or equals 2", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.GREATER_THAN_EQUALS, 4L), "ID greater than or equals 4", false)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.EQUALS, 0L), "ID equals 0 (should be empty)", true)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.GREATER_THAN, 1000L), "ID greater than 1000 (should be empty)", true)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(ID_FIELD, FilterOperator.LESS_THAN, 1L), "ID less than 1 (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.EQUALS, 0L), "ID equals 0 (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.GREATER_THAN, 1000L), "ID greater than 1000 (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(ID_FIELD, FilterOperator.LESS_THAN, 1L), "ID less than 1 (should be empty)", true)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(USER_ID_FIELD, FilterOperator.EQUALS, 1L), "UserId equals 1", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(USER_ID_FIELD, FilterOperator.LESS_THAN, 2L), "UserId less than 2", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(USER_ID_FIELD, FilterOperator.EQUALS, 999L), "UserId equals 999 (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DESCRIPTION_FIELD, FilterOperator.LESS_THAN, DESCRIPTION_PREFIX + "3"), "Description less than 'description - 3'", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DESCRIPTION_FIELD, FilterOperator.GREATER_THAN, DESCRIPTION_PREFIX + "1"), "Description greater than 'description - 1'", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DESCRIPTION_FIELD, FilterOperator.LESS_THAN_EQUALS, DESCRIPTION_PREFIX + "2"), "Description less than or equals 'description - 2'", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DESCRIPTION_FIELD, FilterOperator.GREATER_THAN_EQUALS, DESCRIPTION_PREFIX + "4"), "Description greater than or equals 'description - 4'", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DESCRIPTION_FIELD, FilterOperator.EQUALS, "nonexistent"), "Description equals 'nonexistent' (should be empty)", true)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.LESS_THAN, DESCRIPTION_PREFIX + "3"), "Description less than 'description - 3'", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.GREATER_THAN, DESCRIPTION_PREFIX + "1"), "Description greater than 'description - 1'", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.LESS_THAN_EQUALS, DESCRIPTION_PREFIX + "2"), "Description less than or equals 'description - 2'", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.GREATER_THAN_EQUALS, DESCRIPTION_PREFIX + "4"), "Description greater than or equals 'description - 4'", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DESCRIPTION_FIELD, FilterOperator.EQUALS, "nonexistent"), "Description equals 'nonexistent' (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.CREATED.name()), "Status equals CREATED", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.SHIPPED.name()), "Status equals SHIPPED", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.ARCHIVED.name()), "Status equals ARCHIVED", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.LESS_THAN, "SHIPPED"), "Status less than SHIPPED (CREATED, ARCHIVED)", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.GREATER_THAN, "CREATED"), "Status greater than CREATED (SHIPPED)", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(STATUS_FIELD, FilterOperator.EQUALS, "NONEXISTENT"), "Status equals NONEXISTENT (should be empty)", true)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.CREATED.name()), "Status equals CREATED", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.SHIPPED.name()), "Status equals SHIPPED", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.EQUALS, OrderStatus.ARCHIVED.name()), "Status equals ARCHIVED", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.LESS_THAN, "SHIPPED"), "Status less than SHIPPED (CREATED, ARCHIVED)", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.GREATER_THAN, "CREATED"), "Status greater than CREATED (SHIPPED)", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(STATUS_FIELD, FilterOperator.EQUALS, "NONEXISTENT"), "Status equals NONEXISTENT (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.LESS_THAN, ZonedDateTime.now().plusDays(1)), "DateCreated less than tomorrow", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now().minusDays(1)), "DateCreated greater than yesterday", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.LESS_THAN_EQUALS, ZonedDateTime.now().plusDays(1)), "DateCreated less than or equals tomorrow", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN_EQUALS, ZonedDateTime.now().minusDays(1)), "DateCreated greater than or equals yesterday", false)),
 
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.LESS_THAN, ZonedDateTime.now().plusDays(1)), "DateCreated less than tomorrow", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now().minusDays(1)), "DateCreated greater than yesterday", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.LESS_THAN_EQUALS, ZonedDateTime.now().plusDays(1)), "DateCreated less than or equals tomorrow", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN_EQUALS, ZonedDateTime.now().minusDays(1)), "DateCreated greater than or equals yesterday", false)),
-
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.LESS_THAN, ZonedDateTime.now().minusDays(10)), "DateCreated less than 10 days ago (should be empty)", true)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now().plusDays(10)), "DateCreated greater than 10 days from now (should be empty)", true))
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.LESS_THAN, ZonedDateTime.now().minusDays(10)), "DateCreated less than 10 days ago (should be empty)", true)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(DATE_CREATED_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now().plusDays(10)), "DateCreated greater than 10 days from now (should be empty)", true))
         );
     }
 
     static Stream<Arguments> filteringValidation() {
         return Stream.of(
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(INVALID_FIELD, FilterOperator.EQUALS, "test"), "Invalid field 'invalidField' should throw exception", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(NON_EXISTING_FIELD, FilterOperator.EQUALS, 123L), "Invalid field 'nonExistingField' should throw exception", false)),
-                Arguments.of(new OrderFilteringTestDto(new GenericFilter(FAKE_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now()), "Invalid field 'fakeField' should throw exception", false))
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(INVALID_FIELD, FilterOperator.EQUALS, "test"), "Invalid field 'invalidField' should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(NON_EXISTING_FIELD, FilterOperator.EQUALS, 123L), "Invalid field 'nonExistingField' should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(FAKE_FIELD, FilterOperator.GREATER_THAN, ZonedDateTime.now()), "Invalid field 'fakeField' should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(USER_ID_FIELD, FilterOperator.EQUALS, 1L), "Filter by excluded field UserId equals 1 should throw exception", false)),
+                Arguments.of(new OrderFilteringTestDto(new GenericFilter<>(USER_ID_FIELD, FilterOperator.LESS_THAN, 2L), "Filter by excluded field UserId less than 2 should throw exception", false))
         );
     }
 
@@ -90,7 +86,9 @@ final class OrderTestDataProvider {
         return Stream.of(
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, INVALID_FIELD, SortOrder.ASC, null), "Sort by invalid field 'invalidField' should throw exception", false)),
                 Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, NON_EXISTING_FIELD, SortOrder.DESC, null), "Sort by invalid field 'nonExistingField' should throw exception", false)),
-                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, FAKE_FIELD, SortOrder.ASC, null), "Sort by invalid field 'fakeField' should throw exception", false))
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, FAKE_FIELD, SortOrder.ASC, null), "Sort by invalid field 'fakeField' should throw exception", false)),
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, USER_ID_FIELD, SortOrder.ASC, null), "Sort by excluded field userId ASC should throw exception", false)),
+                Arguments.of(new OrderSortingTestDto(new GenericSortingRequest<>(0, 10, USER_ID_FIELD, SortOrder.DESC, null), "Sort by excluded field userId DESC should throw exception", false))
         );
     }
 

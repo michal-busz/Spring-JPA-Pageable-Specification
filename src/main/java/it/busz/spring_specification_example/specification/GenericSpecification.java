@@ -31,14 +31,11 @@ public class GenericSpecification {
 
     }
 
-    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter> filterList, @NotNull List<String> allowedFields) throws IllegalArgumentException {
+    public static <T> Specification<T> getFiltersSpecification(@NotEmpty List<GenericFilter<?>> filterList) throws IllegalArgumentException {
         var resultSpec = Specification.<T>allOf();
 
         for (final var filter : filterList) {
-            if (!allowedFields.contains(filter.field())) {
-                throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_FIELD.getErrorCode());
-            }
-            final var filterSpec = GenericSpecification.<T, Object>specificationFor(filter.field(), filter.operator(), filter.value());
+            final var filterSpec = GenericSpecification.<T, Object>specificationFor(filter.getField(), filter.getOperator(), filter.getValue());
             resultSpec = resultSpec.and(filterSpec);
         }
         return resultSpec;
@@ -57,9 +54,9 @@ public class GenericSpecification {
         final var type = classForField(root, fieldName);
         if (type.isAssignableFrom(value.getClass())) {
             return value;
-        } else {
-            throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_VALUE.getErrorCode());
         }
+
+        throw new IllegalArgumentException(SpecificationError.INVALID_FILTER_VALUE.getErrorCode());
     }
 
     private static <T> Class<?> classForField(Root<T> root, String fieldName) {

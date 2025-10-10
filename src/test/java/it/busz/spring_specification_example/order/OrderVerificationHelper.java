@@ -103,16 +103,16 @@ final class OrderVerificationHelper {
 
     private static void verifyOrderMatchesFilter(
             OrderDto order, GenericFilter filter, String testDescription) {
-        switch (filter.field()) {
-            case ID_FIELD -> verifyFieldFilter(order.id(), filter.operator(), (Long) filter.value(), testDescription);
+        switch (filter.getField()) {
+            case ID_FIELD -> verifyFieldFilter(order.id(), filter.getOperator(), (Long) filter.getValue(), testDescription);
             case USER_ID_FIELD ->
-                    verifyFieldFilter(order.userId(), filter.operator(), (Long) filter.value(), testDescription);
+                    verifyFieldFilter(order.userId(), filter.getOperator(), (Long) filter.getValue(), testDescription);
             case DESCRIPTION_FIELD ->
-                    verifyFieldFilter(order.description(), filter.operator(), (String) filter.value(), testDescription);
+                    verifyFieldFilter(order.description(), filter.getOperator(), (String) filter.getValue(), testDescription);
             case STATUS_FIELD ->
-                    verifyFieldFilter(order.status(), filter.operator(), (String) filter.value(), testDescription);
+                    verifyFieldFilter(order.status(), filter.getOperator(), (String) filter.getValue(), testDescription);
             case DATE_CREATED_FIELD ->
-                    verifyFieldFilter(order.dateCreated(), filter.operator(), (ZonedDateTime) filter.value(), testDescription);
+                    verifyFieldFilter(order.dateCreated(), filter.getOperator(), (ZonedDateTime) filter.getValue(), testDescription);
         }
     }
 

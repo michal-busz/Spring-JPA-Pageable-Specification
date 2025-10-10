@@ -2,6 +2,7 @@
 
 This repository contains a practical example of implementing generic JPA Specifications in Spring for dynamic filtering, sorting, and pagination. The framework can be reused across different entities while maintaining type safety.
 
+[Check out my blog post for detailed explanations.](https://busz.it/spring-jpa-specification-and-pageable-filtering-sorting-pagination/)
 ## Overview
 
 This project demonstrates a flexible specification framework that allows you to:
@@ -51,8 +52,8 @@ final var request = new GenericSortingRequest<>(
         new OrderListRequest(List.of(statusFilter, dateFilter))
 );
 
-Pageable pageable = request.toPageable(ALLOWED_FILTER_FIELDS);
-Specification<Order> filtersSpec = GenericSpecification.<Order>getFiltersSpecification(request.object().filters(), ALLOWED_FILTER_FIELDS);
+Pageable pageable = request.toPageable();
+Specification<Order> filtersSpec = GenericSpecification.<Order>getFiltersSpecification(request.object().filters());
 List<Order> orders = orderRepo.findAll(filtersSpec, pageable);
 ```
 
@@ -75,11 +76,11 @@ private Specification<Order> getSpecificationForSearch(List<GenericFilter> filte
 
 ## Supported Filter Operators
 
-- `EQUALS`
-- `LESS_THAN`
-- `GREATER_THAN`
-- `LESS_THAN_EQUALS`
-- `GREATER_THAN_EQUALS`
+- `=`
+- `>`
+- `>=`
+- `<`
+- `<=`
 
 ## Supported Data Types
 
@@ -120,7 +121,3 @@ GitHub Actions workflow is configured to:
 - Build on push/PR to `master` and `dev` branches
 - Run tests with JDK 21
 - Cache Maven dependencies for faster builds
-
-## Blog Post
-
-This repository accompanies a blog post about Spring JPA Specification and Pageable implementation. Check out the blog post for detailed explanations.
