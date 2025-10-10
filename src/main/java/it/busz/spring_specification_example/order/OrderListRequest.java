@@ -7,6 +7,6 @@ import java.util.List;
 
 record OrderListRequest(
         @NotEmpty
-        List<GenericFilter> filters
+        List<GenericFilter<?>> filters
 ) {
 }
